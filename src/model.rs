@@ -66,6 +66,7 @@ pub struct SystemInfo {
     pub ram_total: u64,
     pub ram_used: u64,
     pub ram_swap: u64,
+    pub ram_used_swap: u64
 }
 
 impl Display for SystemInfo {
@@ -183,21 +184,25 @@ impl Display for SystemInfo {
             ).as_str());
         }
 
-        str.push_str(format!("\n{}: {}MB",
+        str.push_str(format!("\n{}: {}MB / {}MB - {:.1}%",
                              "RAM".with(color).bold(),
-                             self.ram_total / 1_000_000
-
+                             (self.ram_used+self.ram_used_swap) / 1_000_000,
+                             (self.ram_total+self.ram_swap) / 1_000_000,
+                             ((self.ram_used + self.ram_used_swap) as f64 / (self.ram_total+self.ram_swap) as f64) * 100.0
         ).as_str());
 
-        str.push_str(format!("\n{}: {}MB - {:.1}%",
-                             "├ Used".with(color).bold(),
+        str.push_str(format!("\n{}: {}MB / {}MB - {:.1}%",
+                             "├ Physical".with(color).bold(),
                              self.ram_used / 1_000_000,
+                             self.ram_total / 1_000_000,
                              (self.ram_used as f64 / self.ram_total as f64) * 100.0
         ).as_str());
 
-        str.push_str(format!("\n{}: {}MB",
-                             "└ Swap".with(color).bold(),
-                             self.ram_swap / 1_000_000
+        str.push_str(format!("\n{}: {}MB / {}MB - {:.1}%",
+                            "└ Swap".with(color).bold(),
+                            self.ram_used_swap / 1_000_000,
+                             self.ram_swap / 1_000_000,
+                             (self.ram_used_swap as f64 / self.ram_swap as f64) * 100.0
         ).as_str());
 
         str.push_str(format!("\n{}",

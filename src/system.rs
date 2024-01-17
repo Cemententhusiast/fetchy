@@ -41,6 +41,7 @@ pub fn get_info() -> SystemInfo {
         ram_total: get_ram_total(&sysinfo),
         ram_swap: get_ram_swap(&sysinfo),
         ram_used: get_ram_used(&sysinfo),
+        ram_used_swap: get_ram_swap_used(&sysinfo),
     }
 }
 
@@ -274,5 +275,9 @@ fn get_ram_used(sys: &System) -> u64 {
 
 fn get_ram_swap(sys: &System) -> u64 {
     sys.total_swap()
+}
+
+fn get_ram_swap_used(sys: &System) -> u64{
+    sys.used_swap()
 }
 
